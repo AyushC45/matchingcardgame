@@ -1,0 +1,4 @@
+#Sun Oct 22 19:32:19 EDT 2023
+base.0=C\:\\Users\\ayush\\StudioProjects\\matching_card_game\\build\\app\\intermediates\\dex\\debug\\mergeDexDebug\\classes.dex
+path.0=classes.dex
+renamed.0=classes.dex
