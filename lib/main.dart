@@ -7,6 +7,7 @@ void main() {
     ChangeNotifierProvider(
       create: (context) => MemoryGameProvider(),
       child: MaterialApp(
+        theme: ThemeData.dark(),
         home: MemoryGameApp(),
       ),
     ),
@@ -35,6 +36,15 @@ class MemoryGameProvider extends ChangeNotifier {
 
     // Shuffle the cards.
     cards.shuffle();
+  }
+
+  void resetGame() {
+    isGameWon = false;
+    cards.forEach((card) {
+      card.isFaceUp = false;
+    });
+    cards.shuffle();
+    notifyListeners();
   }
 
   void flipCard(int cardId) {
@@ -71,6 +81,8 @@ class MemoryGameProvider extends ChangeNotifier {
 class MemoryGameApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final cardProvider = Provider.of<MemoryGameProvider>(context);
+
     return Scaffold(
       appBar: AppBar(title: Text('Memory Card Game')),
       body: Center(
@@ -86,14 +98,31 @@ class MemoryGameApp extends StatelessWidget {
                 },
               ),
             ),
-            if (Provider.of<MemoryGameProvider>(context).isGameWon)
-              Text('You won!'),
+            SizedBox(height: 20), // Add some space between the grid and "You won!" message
+            if (cardProvider.isGameWon)
+              Column(
+                children: [
+                  Text(
+                    'You won!',
+                    style: TextStyle(fontSize: 24), // Adjust the font size as needed
+                  ),
+                  SizedBox(height: 10), // Add space between "You won!" message and button
+                  ElevatedButton(
+                    onPressed: () {
+                      cardProvider.resetGame(); // Add a resetGame method to your provider
+                    },
+                    child: Text('Reset Cards'),
+                  ),
+                ],
+              ),
           ],
         ),
       ),
     );
   }
 }
+
+
 
 class MemoryCard extends StatelessWidget {
   final int cardIndex;
